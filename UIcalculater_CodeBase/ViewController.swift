@@ -50,7 +50,11 @@ class ViewController: UIViewController {
         [displayLabel]
             .forEach{ view.addSubview($0)}
         
-        let Buttons = ["7","8","9","+"]
+        let Buttons = ["7", "8", "9", "+"]
+//                       ,"4", "5", "6", "-",
+//                       "1", "2", "3", "*",
+//                       "AC", "0", "=", "/"]
+        
         let horizontalStackView = makeHorizontalStackView(Buttons)
         
         view.addSubview(horizontalStackView)
@@ -74,8 +78,8 @@ class ViewController: UIViewController {
         }
     }
     
-    private func makeHorizontalStackView(_ views: [String]) -> UIStackView{
-        // 버튼 설정 클로저 , map 응용
+    private func makeVerticalStackView(_ views: [String]) -> UIStackView{
+     // 버튼 설정 클로저 , map 응용
         let buttons: [UIButton] = views.map { num in
             let button = UIButton()
             button.setTitle(num, for: .normal)
@@ -89,14 +93,39 @@ class ViewController: UIViewController {
             return button
         }
         
-        // 가로 스택뷰 속성
-        let stackView = UIStackView(arrangedSubviews: buttons)
-        stackView.axis = .horizontal
-        stackView.backgroundColor = .black
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
+        // 수직 스택 뷰 생성
+        let VstackView = UIStackView(arrangedSubviews: buttons)
+        VstackView.axis = .vertical
+        VstackView.backgroundColor = .black
+        VstackView.spacing = 10
+        VstackView.distribution = .fillEqually
 
-        return stackView
+        return VstackView
+    }
+    
+    private func makeHorizontalStackView(_ views: [String]) -> UIStackView{
+        // 버튼 설정 클로저 , map 응용
+           let buttons: [UIButton] = views.map { num in
+               let button = UIButton()
+               button.setTitle(num, for: .normal)
+               button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+               button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+               button.frame.size.height = 80
+               button.frame.size.width = 80
+               button.layer.cornerRadius = 40
+               button.addTarget(self, action: #selector(buttonClicked), for: .touchDown)
+               
+               return button
+           }
+        
+        // 가로 스택뷰 속성
+        let HstackView = UIStackView(arrangedSubviews: buttons)
+        HstackView.axis = .horizontal
+        HstackView.backgroundColor = .black
+        HstackView.spacing = 10
+        HstackView.distribution = .fillEqually
+
+        return HstackView
     }
     
     @objc
@@ -104,4 +133,3 @@ class ViewController: UIViewController {
         print("안농")
     }
 }
-
