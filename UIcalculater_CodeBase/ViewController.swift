@@ -73,18 +73,25 @@ class ViewController: UIViewController {
             $0.width.equalTo(350)
         }
     }
-    
+
     private func makeHorizontalStackView(_ views: [String]) -> UIStackView{
         // 버튼 설정 클로저 , map 응용
         let buttons: [UIButton] = views.map { num in
             let button = UIButton()
             button.setTitle(num, for: .normal)
             button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
-            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            
             button.frame.size.height = 80
             button.frame.size.width = 80
             button.layer.cornerRadius = 40
             button.addTarget(self, action: #selector(buttonClicked), for: .touchDown)
+            
+            // 연산 버튼 orange 색상 변경
+            if "+-*/=AC".contains(num){
+            button.backgroundColor = UIColor.orange
+            }else{
+            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            }
             
             return button
         }
