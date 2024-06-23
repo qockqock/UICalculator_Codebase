@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         view.backgroundColor = .black
         
         // 디스플레이 레이블 설정
-        displayLabel.text = "12345"
+        displayLabel.text = "0"
         displayLabel.textColor = .white
         displayLabel.textAlignment = .right
         displayLabel.font = UIFont.boldSystemFont(ofSize: 60)
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
             $0.width.equalTo(350)
         }
     }
-
+    
     private func makeHorizontalStackView(_ views: [String]) -> UIStackView{
         // 버튼 설정 클로저 , map 응용
         let buttons: [UIButton] = views.map { num in
@@ -88,9 +88,9 @@ class ViewController: UIViewController {
             
             // 연산 버튼 orange 색상 변경
             if "+-*/=AC".contains(num){
-            button.backgroundColor = UIColor.orange
+                button.backgroundColor = UIColor.orange
             }else{
-            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+                button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
             }
             
             return button
@@ -106,15 +106,49 @@ class ViewController: UIViewController {
         // horizaontalStacview 오토레이 아웃
         HstackView.snp.makeConstraints{
             $0.height.equalTo(80)
-            
         }
         
         return HstackView
     }
     
+    /*
+     <aside>
+     🧑🏻‍💻 **버튼을 클릭하면 라벨에 표시되도록 합니다.**
+     
+     </aside>
+     
+     - [ ]  이제 기본 텍스트는 “12345” 가 아닌 “0” 이 되도록 합니다.
+     - [ ]  기본으로 라벨에 노출되어있던 텍스트 오른쪽에 버튼을 클릭하면 그 버튼의 값이 추가되도록 합니다.
+     - 예를들어 설명하면
+     1. 맨처음 기본값 `0`
+     2. 그 다음 `1` 클릭했음 → 표시되는 값은 `01`
+     3. 그 다음 `2` 클릭했음 → 표시되는 값은 `02`
+     4. 그 다음 `+` 클릭했음 → 표시되는 값은 `02+`
+     5. 그 다음 `3` 클릭했음 → 표시되는 값은 `02+3`
+     - [ ]  하지만 `012` 라는 값은 이상합니다. 맨 앞자리가 `0` 인 숫자라면, 0을 지우고 표현하도록 합니다.
+     - 예를들면, `012` → `12` 가 되어야 합니다.
+     */
+    
     @objc
-    private func buttonClicked(){
-        print("안농")
+    private func buttonClicked(_ sender: UIButton){
+        guard let buttonTitle = sender.currentTitle else { return }
+        
+        // 초기화 로직
+        if buttonTitle == "AC" {
+            displayLabel.text = "0"
+            return
+        }
+        
+        // 기본값이 0일 때, 새로운 값으로 대체
+        if displayLabel.text == "0" {
+            displayLabel.text = buttonTitle
+        } else {
+            displayLabel.text = (displayLabel.text ?? "") + buttonTitle
+        }
+        
+        // 0 제거
+        if let text = displayLabel.text, text.hasPrefix("0") && text.count > 1 && !text.hasPrefix("0.") {
+            displayLabel.text = String(text.dropFirst())
+        }
     }
 }
-
