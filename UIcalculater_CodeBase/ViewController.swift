@@ -5,12 +5,24 @@
 //  Created by 머성이 on 6/20/24.
 //
 
+// 추가 해야할 것
+/*
+    1.  m -> model
+        v -> 디자인
+        c -> view. model 데이터를 갖고와서 컨트롤러
+
+    나누어보기
+ 
+    2. SOLID 적용해보기
+ 
+ */
+
 import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
     let displayLabel = UILabel()
-    
+    var oper = "+-*/"
     override func viewDidLoad() {
         super.viewDidLoad()
         print("값이 제대로 오는지 확인")
@@ -44,7 +56,6 @@ class ViewController: UIViewController {
         
         var rowButtons: [[String]] = []
         
-        // stride 사용 -> 사용방법 블로그 기재
         // horizontalStackView가 생성될 때 마다 4개씩 끊어서 verticalStackView에 투척
         for i in stride(from: 0, to: Buttons.count, by: 4){
             let row = Array(Buttons[i..<min(i + 4, Buttons.count)])
@@ -115,36 +126,37 @@ class ViewController: UIViewController {
     private func buttonClicked(_ sender: UIButton){
         guard let buttonTitle = sender.currentTitle else { return }
         
-        // 초기화 로직
-        if buttonTitle == "AC" {
+        switch buttonTitle{
+        case "AC":
+            // 초기화 로직
             displayLabel.text = "0"
             return
-        }
-        
-        // 계산 로직
-            if buttonTitle == "=" {
-                if let BTexpression = displayLabel.text {
-                    if let result = calculate(expression: BTexpression) {
-                        displayLabel.text = "\(result)"
-                    } else {
-                        displayLabel.text = "Error"
-                    }
+        case "=":
+            // 계산 로직
+            // BTexpression을 굳이 선언해준 이유는, 가독성 면에서도 그렇고 안전하게 언래핑하기 위함도 있다.
+            if let BTexpression = displayLabel.text{
+                if let result = calculate(expression: BTexpression) {
+                    displayLabel.text = "\(result)"
+                }else {
+                    displayLabel.text = "에러 발생"
                 }
                 return
             }
-        
-        // 기본값이 0일 때, 새로운 값으로 대체
-        if displayLabel.text == "0" {
-            displayLabel.text = buttonTitle
-        } else {
-            displayLabel.text = (displayLabel.text ?? "") + buttonTitle
+        default:
+            // 중복 제거
+            if let checkOper = displayLabel.text, let lastChar = checkOper.last {
+                if oper.contains(lastChar) && oper.contains(buttonTitle){
+                    displayLabel.text?.removeLast()
+                }
+            }
+            
+            // 기본값이 0일 때, 새로운 값으로 대체
+            if displayLabel.text == "0" {
+                displayLabel.text = buttonTitle
+            } else {
+                displayLabel.text = (displayLabel.text ?? "") + buttonTitle
+            }
         }
-        
-        // 0 제거
-        if let text = displayLabel.text, text.hasPrefix("0") && text.count > 1 && !text.hasPrefix("0.") {
-            displayLabel.text = String(text.dropFirst())
-        }
-        
     }
     
     /// 수식 문자열을 넣으면 계산해주는 메서드.
