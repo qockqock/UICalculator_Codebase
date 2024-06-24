@@ -111,24 +111,6 @@ class ViewController: UIViewController {
         return HstackView
     }
     
-    /*
-     <aside>
-     🧑🏻‍💻 **버튼을 클릭하면 라벨에 표시되도록 합니다.**
-     
-     </aside>
-     
-     - [ ]  이제 기본 텍스트는 “12345” 가 아닌 “0” 이 되도록 합니다.
-     - [ ]  기본으로 라벨에 노출되어있던 텍스트 오른쪽에 버튼을 클릭하면 그 버튼의 값이 추가되도록 합니다.
-     - 예를들어 설명하면
-     1. 맨처음 기본값 `0`
-     2. 그 다음 `1` 클릭했음 → 표시되는 값은 `01`
-     3. 그 다음 `2` 클릭했음 → 표시되는 값은 `02`
-     4. 그 다음 `+` 클릭했음 → 표시되는 값은 `02+`
-     5. 그 다음 `3` 클릭했음 → 표시되는 값은 `02+3`
-     - [ ]  하지만 `012` 라는 값은 이상합니다. 맨 앞자리가 `0` 인 숫자라면, 0을 지우고 표현하도록 합니다.
-     - 예를들면, `012` → `12` 가 되어야 합니다.
-     */
-    
     @objc
     private func buttonClicked(_ sender: UIButton){
         guard let buttonTitle = sender.currentTitle else { return }
@@ -138,6 +120,18 @@ class ViewController: UIViewController {
             displayLabel.text = "0"
             return
         }
+        
+        // 계산 로직
+            if buttonTitle == "=" {
+                if let BTexpression = displayLabel.text {
+                    if let result = calculate(expression: BTexpression) {
+                        displayLabel.text = "\(result)"
+                    } else {
+                        displayLabel.text = "Error"
+                    }
+                }
+                return
+            }
         
         // 기본값이 0일 때, 새로운 값으로 대체
         if displayLabel.text == "0" {
@@ -150,5 +144,24 @@ class ViewController: UIViewController {
         if let text = displayLabel.text, text.hasPrefix("0") && text.count > 1 && !text.hasPrefix("0.") {
             displayLabel.text = String(text.dropFirst())
         }
+        
+    }
+    
+    /// 수식 문자열을 넣으면 계산해주는 메서드.
+    ///
+    /// 예를 들어 expression 에 "1+2+3" 이 들어오면 6 을 리턴한다.
+    /// 잘못된 형식의 수식을 넣으면 앱이 크래시 난다. ex) "1+2++"
+    ///
+    /// 'NSExpression' 클래스
+    /// -> 문자열 수식을 평가할 수 있는 클래스. 이를 사용하면 기본적인 산술 연산 뿐 아니라 다양한 수학 함수도 사용 가능
+    func calculate(expression: String) -> Int? {
+        let expression = NSExpression(format: expression)
+        if let result = expression.expressionValue(with: nil, context: nil) as? Int {
+            return result
+        } else {
+            return nil
+        }
     }
 }
+
+
