@@ -143,12 +143,17 @@ class ViewController: UIViewController {
                 return
             }
         default:
-            // 중복 제거
-            if let checkOper = displayLabel.text, let lastChar = checkOper.last {
+            // 연산기호 중복 제거
+            if let checkOper = displayLabel.text, let lastChar = checkOper.last{
                 if oper.contains(lastChar) && oper.contains(buttonTitle){
                     displayLabel.text?.removeLast()
+                }else if checkOper == "0" && oper.contains(buttonTitle) {
+                 // 첫째 자리에 연산기호 X
+                    return
                 }
             }
+            
+            
             
             // 기본값이 0일 때, 새로운 값으로 대체
             if displayLabel.text == "0" {
