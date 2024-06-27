@@ -5,18 +5,6 @@
 //  Created by 머성이 on 6/20/24.
 //
 
-// 추가 해야할 것
-/*
-    1.  m -> model
-        v -> 디자인
-        c -> view. model 데이터를 갖고와서 컨트롤러
-
-    나누어보기
- 
-    2. SOLID 적용해보기
- //
- */
-
 import UIKit
 import SnapKit
 
@@ -33,15 +21,15 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("값이 제대로 오는지 확인")
-        
+        //        print("값이 제대로 오는지 확인")
+        //        
         // 버튼들이 제대로 초기화되었는지 확인
-                if clView.buttons.isEmpty {
-                    print("버튼 배열이 비어있습니다.")
-                } else {
-                    print("버튼 배열 초기화 성공")
-                }
-
+        //                if clView.buttons.isEmpty {
+        //                    print("버튼 배열이 비어있습니다.")
+        //                } else {
+        //                    print("버튼 배열 초기화 성공")
+        //                }
+        
         clView.buttons.forEach{
             $0.addTarget(self, action: #selector(buttonClicked), for: .touchDown)
         }
@@ -58,22 +46,31 @@ class ViewController: UIViewController {
             return
         case "=":
             // 계산 로직
-            // BTexpression을 굳이 선언해준 이유는, 가독성 면에서도 그렇고 안전하게 언래핑하기 위함도 있다.
-            if let BTexpression = clView.displayLabel.text{
-                if let result = calculate(expression: BTexpression) {
+            if let checkEqul = clView.displayLabel.text, let lastChar = checkEqul.last{
+                if oper.contains(lastChar){
+                    clView.displayLabel.text = "Error"
+                    return
+                }
+                
+                if let result = calculate(expression: checkEqul){
                     clView.displayLabel.text = "\(result)"
-                }else {
-                    clView.displayLabel.text = "에러 발생"
+                }else if clView.displayLabel.text == "Error"{
+                    clView.displayLabel.text = "0"
+                    return
+                }else{
+                    clView.displayLabel.text = "Error code:???"
+                    return
                 }
                 return
             }
+            
         default:
             // 연산기호 중복 제거
             if let checkOper = clView.displayLabel.text, let lastChar = checkOper.last{
                 if oper.contains(lastChar) && oper.contains(buttonTitle){
                     clView.displayLabel.text?.removeLast()
                 }else if checkOper == "0" && oper.contains(buttonTitle) {
-                 // 첫째 자리에 연산기호 X
+                    // 첫째 자리에 연산기호 X
                     return
                 }
             }
@@ -104,4 +101,8 @@ class ViewController: UIViewController {
     }
 }
 
+//#Preview{
+//    let vc = ViewController()
+//    return vc
+//}
 

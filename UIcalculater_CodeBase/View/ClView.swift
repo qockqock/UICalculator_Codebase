@@ -17,7 +17,7 @@ class ClView: UIView {
         label.textColor = .white
         label.textAlignment = .right
         label.font = UIFont.boldSystemFont(ofSize: 60)
-    
+        
         return label
     }()
     
@@ -44,12 +44,12 @@ class ClView: UIView {
         }
         
         // 수직 스택 뷰 생성
-            let verStackView = UIStackView()
-            verStackView.axis = .vertical
-            verStackView.backgroundColor = .black
-            verStackView.spacing = 10
-            verStackView.distribution = .fillEqually
-
+        let verStackView = UIStackView()
+        verStackView.axis = .vertical
+        verStackView.backgroundColor = .black
+        verStackView.spacing = 10
+        verStackView.distribution = .fillEqually
+        
         // horizontalStackView가 생성될 때 마다 4개씩 끊어서 verticalStackView에 투척
         for i in stride(from: 0, to: ClButtons.texts.count, by: 4){
             let row = Array(ClButtons.texts[i..<min(i + 4, ClButtons.texts.count)])
@@ -98,20 +98,18 @@ class ClView: UIView {
             
             return button
         }
-
+        
         // 가로 스택뷰 속성
         let HorizontalStackView = UIStackView(arrangedSubviews: rowButtons)
-            HorizontalStackView.axis = .horizontal
-            HorizontalStackView.backgroundColor = .black
-            HorizontalStackView.spacing = 10
-            HorizontalStackView.distribution = .fillEqually
-            
-            HorizontalStackView.snp.makeConstraints{
+        HorizontalStackView.axis = .horizontal
+        HorizontalStackView.backgroundColor = .black
+        HorizontalStackView.spacing = 10
+        HorizontalStackView.distribution = .fillEqually
+        
+        HorizontalStackView.snp.makeConstraints{
             $0.height.equalTo(80)
         }
         
         return HorizontalStackView
     }
-    
-    
 }
