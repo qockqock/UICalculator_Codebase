@@ -3,7 +3,7 @@
 Ui 계산기 구현
 
 Storyboard : https://github.com/qockqock/UICalculator_Storyboard
-## 사용 스택
+## 사용 기술
 ● Swift
 
 ● SnapKit
